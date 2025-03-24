@@ -47,7 +47,7 @@ format:
 
 研究者というある種の専門家でさえ困難を極めている．一般の人々なら尚更．
 
-## 実は英語はとても大変なのでは
+## 実は英語はとても難しいのでは
 
 - プログラミング言語 JuliaLang は柔軟なプログラミングを可能にしながら実行速度を担保する．
   - `two-language problem` を解決している．
@@ -56,6 +56,8 @@ format:
     - `We are greedy: we want more.`
 
 - 非英語圏の人間はもっと`欲張り (=greedy)` になってもいいのでは？
+
+## 実は英語はとても難しいのでは
 
 - 自然言語における $(N \geq 2)$ -language problem が潜在的にあるのでは？
   - 同様に非英語圏における Julia ユーザをサポートがあってもいいのでは?
@@ -75,7 +77,7 @@ JuliaHub 日本支社があれば是非入社したいが残念ながらその�
 
 ## 機械翻訳の利用
 
-機械に任せよう．
+（多少ぎこちなくても)機械に任せよう．
 
 - Google 翻訳
 - DeepL、ChatGPT などの大規模言語モデル（LLM）を用いた解決策
@@ -90,7 +92,286 @@ JuliaHub 日本支社があれば是非入社したいが残念ながらその�
 - AtelierArith/DocstringTranslationExoBackend.jl: Translate Julia's docstrings using `exo`: Run your own AI cluster at home with everyday devices
 - AtelierArith/DocstringChef.jl: May I explain something?
 
-## Documenter.jl ベースのドキュメント翻訳
+---
 
-意外と難しい
+### How to use `DocstringTranslation.jl`
+
+```julia
+julia> using DotEnv; DotEnv.load!(); 
+julia> using DocstringTranslation; @switchlang! :Japanese
+julia> @doc exp
+  exp(x)
+
+  xの自然基底指数を計算します。言い換えれば、ℯ^xです。
+
+  他にexp2、exp10、およびcisも参照してください。
+
+  例
+  ≡≡
+
+  julia> exp(1.0)
+  2.718281828459045
+
+  julia> exp(im * pi) ≈ cis(pi)
+  true
+
+  exp(A::AbstractMatrix)
+
+  行列 A
+  の行列指数関数を計算します。これは次のように定義されます。
+
+
+e^A = \sum_{n=0}^{\infty} \frac{A^n}{n!}.
+
+
+  対称行列またはエルミート行列 A
+  に対しては、固有分解（eigen）が使用され、それ以外の場合はスケーリングと平方化アルゴリズムが選択されます（詳細は
+  [^H05] を参照）。
+
+  │ [^H05]
+  │
+  │  Nicholas J. Higham, "The squaring and scaling
+  │  method for the matrix exponential revisited",
+  │  SIAM Journal on Matrix Analysis and
+  │  Applications, 26(4), 2005, 1179-1193.
+  │  doi:10.1137/090768539
+  │  (https://doi.org/10.1137/090768539)
+
+  例
+  ≡≡
+
+  julia> A = Matrix(1.0I, 2, 2)
+  2×2 Matrix{Float64}:
+   1.0  0.0
+   0.0  1.0
+
+  julia> exp(A)
+  2×2 Matrix{Float64}:
+   2.71828  0.0
+   0.0      2.71828
+```
+
+- ChatGPT API モデルとして `gpt-4o-mini-2024-07-18` を使用している．
+
+## Docstring 翻訳の原理
+
+- `@doc sin` などを呼ばれたときメソッド `Docs.parsedoc(d::DocStr)` が呼ばれる．このメソッドをハックする．
+
+```julia
+lang = "Japanese"
+switchlang!(lang)
+@eval function Docs.parsedoc(d::DocStr)
+    if d.object === nothing
+        md = Docs.formatdoc(d)
+        md.meta[:module] = d.data[:module]
+        md.meta[:path] = d.data[:path]
+        d.object = md
+    end
+    # d.object # <-- original implementation
+    translate_with_openai(d.object) # <-- hack implementation
+end
+```
+
+Markdown オブジェクト `d.object` を所望の内容に変換することで目的を達成できる．
+
+---
+
+### `Documenter.jl` による Markdown の翻訳
+
+- マークダウン 1枚を丸ごと翻訳させる (End-to-End) を考えることもできる．
+  - DocstringTranslation.jl は Ent-to-End
+- Documenter.jl シンタックスを用いたマークダウンの翻訳は難しい
+
+---
+
+### `Documenter.jl` による Markdown の翻訳
+
+- 実はそこまで簡単ではない
+  - マークダウンの構造を壊す可能性がある 
+    - backtick の抜け漏れの可能性
+    - 翻訳結果が表す数式モードルール
+  - ソースコードブロックも含めて翻訳すると `doctest` 実行時に失敗する可能性がある．
+  - `[xxx](@ref yyy)` という Documenter の `cross_references` を表す構文が翻訳されると不都合が生じる
+    - `xxx` の箇所を翻訳すると `cross_references` チェック時にビルドが失敗する
+  - `xxx` として `Header{n}` を指すケースがあるので安易に翻訳ができない．
+
+- 小さいトークンの入力を複数実行するほうが一度に全ての文章を翻訳させるより速度が速い．
+
+---
+
+## `Markdown.parse` 結果の利用
+
+なるべくマークダウンの構造を壊さないように翻訳をする必要がある．
+
+`Markdown.parse` の結果を利用して翻訳対象と翻訳するべきでない対象を区別する．
+
+```julia
+julia> md = Markdown.parse("See [Julia docs](https://docs.julialang.org/en/v1/) to learn more")
+  See Julia docs (https://docs.julialang.org/en/v1/) to
+  learn more
+
+julia> md.content
+1-element Vector{Any}:
+ Markdown.Paragraph(Any["See ", Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/"), " to learn more"])
+```
+
+上記の例だと `Markdown.Link` の部分は翻訳を避けたい．それ以外は翻訳したい．
+
+## `Markdown.Link` の置き換え
+
+何かしらの方法で `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")` を `asfa93r_bfeafasf` のように ID に変換する．
+
+翻訳後に ID を元に戻す.
+
+```julia
+julia> md = Markdown.parse("詳しくは `asfa93r_bfeafasf` を見てください")
+  See asfa93r_bfeafasf to learn more
+
+julia> md.content
+1-element Vector{Any}:
+ Markdown.Paragraph(Any["詳しくは", Markdown.Code("", "asfa93r_bfeafasf"), "を見てください"])
+```
+
+`Markdown.Code("", "asfa93r_bfeafasf")` の部分を `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")` に置き換える．こうすると "概ね" cross reference に関するエラーを回避できる．（改善の余地はある）
+
+## 詳細な実装
+
+```julia
+function create_hex(l::Markdown.Link)
+    (bytes2hex(codeunits(join(l.text))) * "_" * bytes2hex(codeunits(l.url)))
+end
+
+function translate!(p::Markdown.Paragraph)
+    hex2link = Dict()
+    link2hex = Dict()
+    content = map(p.content) do c
+        # Protect Link so that it does not break during translation
+        if c isa Markdown.Link
+            h = create_hex(c)
+            hex2link[string(h)] = c
+            link2hex[c] = h
+            "`" * h * "`"
+        else
+            c
+        end
+    end
+    p_orig = deepcopy(p)
+    p.content = content
+    result = translate_with_openai(Markdown.MD(p), lang = "Japanese")
+    try
+        translated_content = map(result[1].content) do c
+            if c isa Markdown.Code
+                if isempty(c.language)
+                    c = get(hex2link, c.code, c)
+                else
+                    c
+                end
+            else
+                c
+            end
+        end
+        p.content = translated_content
+    catch e
+        @warn "Failed to translate by $(e)" p
+        return p_orig
+    end
+    return p
+end
+
+function translate!(list::Markdown.List)
+    for item in list.items
+        Base.Threads.@threads for i in item
+            translate!(i)
+        end
+    end
+end
+
+function translate!(c)
+    if hasproperty(c, :content)
+        Base.Threads.@threads for c in c.content
+            translate!(c)
+        end
+    end
+    c
+end
+
+function translate!(md::Markdown.MD)
+    Base.Threads.@threads for c in md.content
+        translate!(c)
+    end
+    md
+end
+```
+
+## `Documenter.Page(source, build, workdir` のハック
+
+Documenter.jl がマークダウンファイルを読み込むタイミングで翻訳機構を挿入する．
+
+```julia
+function Documenter.Page(
+    source::AbstractString,
+    build::AbstractString,
+    workdir::AbstractString,
+)
+    # The Markdown standard library parser is sensitive to line endings:
+    #   https://github.com/JuliaLang/julia/issues/29344
+    # This can lead to different AST and therefore differently rendered docs, depending on
+    # what platform the docs are being built (e.g. when Git checks out LF files with
+    # CRFL line endings on Windows). To make sure that the docs are always built consistently,
+    # we'll normalize the line endings when parsing Markdown files by removing all CR characters.
+    
+    if !isfile(joinpath("jp", relpath(source)))
+        mdsrc = replace(read(source, String), '\r' => "")
+        mdpage = Markdown.parse(mdsrc)
+        @info "Translating ..." mdpage
+        mdpage = translate!(mdpage)
+        @info "Translated" mdpage
+        # end DocstringTranslationOllamaBackend
+        mkpath(dirname(joinpath("jp", relpath(source))))
+        write(joinpath("jp", relpath(source)), string(mdpage))
+    else
+         @info "Translating ..." joinpath("jp", relpath(source))
+        mdsrc = replace(read(joinpath("jp", relpath(source)), String), '\r' => "")
+        mdpage = Markdown.parse(mdsrc)
+    end
+    # end DocstringTranslationOllamaBackend
+    mdast = try
+        convert(Documenter.MarkdownAST.Node, mdpage)
+    catch err
+        @error """
+        MarkdownAST conversion error on $(source).
+        This is a bug — please report this on the Documenter issue tracker
+        """
+        rethrow(err)
+    end
+    return Documenter.Page(
+        source,
+        build,
+        workdir,
+        mdpage.content,
+        Documenter.Globals(),
+        mdast,
+    )
+end
+```
+
+## 成果物
+
+- https://atelierarith.github.io/UnofficialJuliaDocJP/
+- https://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/
+
+## よくわかってないこと
+
+- パラグラフを検出し翻訳する箇所はスレッドをいっぱい作成して並列に回すことで強引に翻訳を高速している．
+  - 要するに HTTP リクエストを大量に発行する方法
+  - もっと良い方法はある？
+  - 丸ごと翻訳するよりトークン数を節約できる．
+
+- 翻訳結果のキャッシュの管理
+  - 毎回翻訳するのは時間がかかる．
+      - 翻訳済み結果は hash キーと対応させて管理する方法
+      - 翻訳結果は Scratch.jl を使う方法がありそう．
+  - DocstringBankJP.jl 的なパッケージがあると嬉しい？
+
+
 
