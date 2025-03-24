@@ -1,0 +1,233 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "非英語圏における Julia ユーザのための技術. 於 JuliaTokai 21",
+    "section": "",
+    "text": "このWebページでは JuliaTokai 21 で話す資料・リンクを格納する.\n\nslide\n\nMarkdown で記述された Julia のドキュメントを翻訳する技術についての提案をします．提案された手法は主に英語を母国語としない人々を補助する役割を持ちます．\n\nslide (EN)\n\nWe propose a technique for translating Julia documents written in Markdown. The proposed method is primarily intended to assist non-native English speakers.\nThis slide is traslated from slide above via ChatGPT API using chagtpt-md-translator"
+  },
+  {
+    "objectID": "index.html#description",
+    "href": "index.html#description",
+    "title": "非英語圏における Julia ユーザのための技術. 於 JuliaTokai 21",
+    "section": "",
+    "text": "このWebページでは JuliaTokai 21 で話す資料・リンクを格納する.\n\nslide\n\nMarkdown で記述された Julia のドキュメントを翻訳する技術についての提案をします．提案された手法は主に英語を母国語としない人々を補助する役割を持ちます．\n\nslide (EN)\n\nWe propose a technique for translating Julia documents written in Markdown. The proposed method is primarily intended to assist non-native English speakers.\nThis slide is traslated from slide above via ChatGPT API using chagtpt-md-translator"
+  },
+  {
+    "objectID": "index.html#appendix",
+    "href": "index.html#appendix",
+    "title": "非英語圏における Julia ユーザのための技術. 於 JuliaTokai 21",
+    "section": "Appendix",
+    "text": "Appendix\n\nこのページは Quarto を使って構築されている．qmd ファイルは こちら で管理されている．読者は教育・研究目的であれば自由に使用ができる．\nThis page is built using Quarto. The qmd files are maintained at here. Readers are free to use them for educational and research purposes."
+  },
+  {
+    "objectID": "slide/slide_en.html#background",
+    "href": "slide/slide_en.html#background",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Background",
+    "text": "Background\n\nThe official documentation and manuals for the programming language Julia are written in “English.” Therefore, it is necessary to understand concepts in “English.”\n\nAlthough there are a few explanatory books written in Japanese, cutting-edge information requires reading texts written in English.\n\nWhen necessary, communication on GitHub Issues and Julia Discourse will be in “English” (since everyone writes in “English”).\n\nThe person who created this slide is Japanese and a native Japanese speaker.\n\nNaturally, they find it easier and more comfortable to read and write in Japanese compared to English.\n\nIt is believed that there is a psychological and time cost, to a greater or lesser extent, for non-English speakers."
+  },
+  {
+    "objectID": "slide/slide_en.html#quantifying-psychological-and-time-costs",
+    "href": "slide/slide_en.html#quantifying-psychological-and-time-costs",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Quantifying Psychological and Time Costs",
+    "text": "Quantifying Psychological and Time Costs\n(From a post by Tatsuya Amano)\n\n\nHow much disadvantage do researchers who are not native English speakers face? Through a survey in eight countries, including Japan, we quantified that non-native speakers spend significantly more time and effort compared to native English speakers when reading, writing, publishing papers, preparing presentations, and participating in international conferences. https://t.co/Z6za22rMgg pic.twitter.com/88KfiBFPN9\n\n— Tatsuya Amano (@tatsuya_amano) July 18, 2023"
+  },
+  {
+    "objectID": "slide/slide_en.html#how-difficult-it-is",
+    "href": "slide/slide_en.html#how-difficult-it-is",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "How Difficult It Is",
+    "text": "How Difficult It Is\nFrom a post by Tatsuya Amano (https://x.com/tatsuya_amano/status/1681403580648140800)\n\nThis issue greatly affects researchers who are not native English speakers. Many survey participants reported that conducting science in English requires “enormous time” and “financial burden,” causing significant “stress and anxiety,” and as a result, “many studies are not published” and “talented individuals abandon their careers.”\n\n\nEven experts like researchers find it extremely challenging. It is even more so for the general public."
+  },
+  {
+    "objectID": "slide/slide_en.html#is-english-actually-very-difficult",
+    "href": "slide/slide_en.html#is-english-actually-very-difficult",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Is English Actually Very Difficult?",
+    "text": "Is English Actually Very Difficult?\n\nThe programming language JuliaLang enables flexible programming while ensuring execution speed.\n\nIt solves the two-language problem.\nWhy We Created Julia\n\nIn short, because we are greedy.\nWe are greedy: we want more.\n\n\nShouldn’t non-English speakers also become more greedy?"
+  },
+  {
+    "objectID": "slide/slide_en.html#is-english-actually-very-difficult-1",
+    "href": "slide/slide_en.html#is-english-actually-very-difficult-1",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Is English Actually Very Difficult?",
+    "text": "Is English Actually Very Difficult?\n\nIs there a potential \\((N \\geq 2)\\) -language problem in natural languages?\n\nSimilarly, shouldn’t there be support for Julia users in non-English speaking regions?\nShouldn’t there be a right to read and think in one’s native language?\nShouldn’t there be a right to write documents in one’s native language?\n\nLogically speaking, it is possible to write documents in Japanese.\n\n\nThe barrier is economic."
+  },
+  {
+    "objectID": "slide/slide_en.html#economic-barriers",
+    "href": "slide/slide_en.html#economic-barriers",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Economic Barriers",
+    "text": "Economic Barriers\n\nTranslating manuals written in English is labor-intensive.\nWhen a version is updated, it is necessary to update the translated sections. Keeping up with this requires effort.\n\nWho will pay for this effort?\nIf there were a JuliaHub Japan branch, I would love to join, but unfortunately, I haven’t found such a position."
+  },
+  {
+    "objectID": "slide/slide_en.html#use-of-machine-translation",
+    "href": "slide/slide_en.html#use-of-machine-translation",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Use of Machine Translation",
+    "text": "Use of Machine Translation\n(Let’s leave it to the machine, even if it’s a bit awkward.)\n\nGoogle Translate\nSolutions using large language models (LLM) like DeepL, ChatGPT\n\nThis slide introduces a translation method using the ChatGPT API."
+  },
+  {
+    "objectID": "slide/slide_en.html#translation-of-docstrings",
+    "href": "slide/slide_en.html#translation-of-docstrings",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Translation of Docstrings",
+    "text": "Translation of Docstrings\n\nAtelierArith/DocstringTranslation.jl: Translate docstrings in Julia into your preferred language.\nAtelierArith/DocstringTranslationOllamaBackend.jl: DocstringTranslation using Ollama\nAtelierArith/DocstringTranslationGoogleTransBackend.jl: Translate Julia’s docstring using googletrans\nAtelierArith/DocstringTranslationExoBackend.jl: Translate Julia’s docstrings using exo: Run your own AI cluster at home with everyday devices\nAtelierArith/DocstringChef.jl: May I explain something?"
+  },
+  {
+    "objectID": "slide/slide_en.html#principle-of-docstring-translation",
+    "href": "slide/slide_en.html#principle-of-docstring-translation",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Principle of Docstring Translation",
+    "text": "Principle of Docstring Translation\n\nWhen @doc sin is called, the method Docs.parsedoc(d::DocStr) is invoked. This method is hacked.\n\nlang = \"Japanese\"\nswitchlang!(lang)\n@eval function Docs.parsedoc(d::DocStr)\n    if d.object === nothing\n        md = Docs.formatdoc(d)\n        md.meta[:module] = d.data[:module]\n        md.meta[:path] = d.data[:path]\n        d.object = md\n    end\n    # d.object # &lt;-- original implementation\n    translate_with_openai(d.object) # &lt;-- hack implementation\nend\nBy converting the Markdown object d.object to the desired content, the goal can be achieved."
+  },
+  {
+    "objectID": "slide/slide_en.html#use-of-markdown.parse-results",
+    "href": "slide/slide_en.html#use-of-markdown.parse-results",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Use of Markdown.parse Results",
+    "text": "Use of Markdown.parse Results\nIt is necessary to translate without breaking the Markdown structure as much as possible.\nUse the results of Markdown.parse to distinguish between what should and should not be translated.\njulia&gt; md = Markdown.parse(\"See [Julia docs](https://docs.julialang.org/en/v1/) to learn more\")\n  See Julia docs (https://docs.julialang.org/en/v1/) to\n  learn more\n\njulia&gt; md.content\n1-element Vector{Any}:\n Markdown.Paragraph(Any[\"See \", Markdown.Link(Any[\"Julia docs\"], \"https://docs.julialang.org/en/v1/\"), \" to learn more\"])\nIn the above example, the Markdown.Link part should be avoided in translation. Everything else should be translated."
+  },
+  {
+    "objectID": "slide/slide_en.html#replacement-of-markdown.link",
+    "href": "slide/slide_en.html#replacement-of-markdown.link",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Replacement of Markdown.Link",
+    "text": "Replacement of Markdown.Link\nConvert Markdown.Link(Any[\"Julia docs\"], \"https://docs.julialang.org/en/v1/\") into an ID like asfa93r_bfeafasf by some method.\nRestore the ID after translation.\njulia&gt; md = Markdown.parse(\"詳しくは `asfa93r_bfeafasf` を見てください\")\n  See asfa93r_bfeafasf to learn more\n\njulia&gt; md.content\n1-element Vector{Any}:\n Markdown.Paragraph(Any[\"詳しくは\", Markdown.Code(\"\", \"asfa93r_bfeafasf\"), \"を見てください\"])\nReplace the part Markdown.Code(\"\", \"asfa93r_bfeafasf\") with Markdown.Link(Any[\"Julia docs\"], \"https://docs.julialang.org/en/v1/\"). This can “generally” avoid errors related to cross-references. (There is room for improvement)"
+  },
+  {
+    "objectID": "slide/slide_en.html#detailed-implementation",
+    "href": "slide/slide_en.html#detailed-implementation",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Detailed Implementation",
+    "text": "Detailed Implementation\nfunction create_hex(l::Markdown.Link)\n    (bytes2hex(codeunits(join(l.text))) * \"_\" * bytes2hex(codeunits(l.url)))\nend\n\nfunction translate!(p::Markdown.Paragraph)\n    hex2link = Dict()\n    link2hex = Dict()\n    content = map(p.content) do c\n        # Protect Link so that it does not break during translation\n        if c isa Markdown.Link\n            h = create_hex(c)\n            hex2link[string(h)] = c\n            link2hex[c] = h\n            \"`\" * h * \"`\"\n        else\n            c\n        end\n    end\n    p_orig = deepcopy(p)\n    p.content = content\n    result = translate_with_openai(Markdown.MD(p), lang = \"Japanese\")\n    try\n        translated_content = map(result[1].content) do c\n            if c isa Markdown.Code\n                if isempty(c.language)\n                    c = get(hex2link, c.code, c)\n                else\n                    c\n                end\n            else\n                c\n            end\n        end\n        p.content = translated_content\n    catch e\n        @warn \"Failed to translate by $(e)\" p\n        return p_orig\n    end\n    return p\nend\n\nfunction translate!(list::Markdown.List)\n    for item in list.items\n        Base.Threads.@threads for i in item\n            translate!(i)\n        end\n    end\nend\n\nfunction translate!(c)\n    if hasproperty(c, :content)\n        Base.Threads.@threads for c in c.content\n            translate!(c)\n        end\n    end\n    c\nend\n\nfunction translate!(md::Markdown.MD)\n    Base.Threads.@threads for c in md.content\n        translate!(c)\n    end\n    md\nend"
+  },
+  {
+    "objectID": "slide/slide_en.html#hack-for-documenter.pagesource-build-workdir",
+    "href": "slide/slide_en.html#hack-for-documenter.pagesource-build-workdir",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Hack for Documenter.Page(source, build, workdir",
+    "text": "Hack for Documenter.Page(source, build, workdir\nInsert the translation mechanism when Documenter.jl reads the markdown file.\nfunction Documenter.Page(\n    source::AbstractString,\n    build::AbstractString,\n    workdir::AbstractString,\n)\n    # The Markdown standard library parser is sensitive to line endings:\n    #   https://github.com/JuliaLang/julia/issues/29344\n    # This can lead to different AST and therefore differently rendered docs, depending on\n    # what platform the docs are being built (e.g. when Git checks out LF files with\n    # CRFL line endings on Windows). To make sure that the docs are always built consistently,\n    # we'll normalize the line endings when parsing Markdown files by removing all CR characters.\n    \n    if !isfile(joinpath(\"jp\", relpath(source)))\n        mdsrc = replace(read(source, String), '\\r' =&gt; \"\")\n        mdpage = Markdown.parse(mdsrc)\n        @info \"Translating ...\" mdpage\n        mdpage = translate!(mdpage)\n        @info \"Translated\" mdpage\n        # end DocstringTranslationOllamaBackend\n        mkpath(dirname(joinpath(\"jp\", relpath(source))))\n        write(joinpath(\"jp\", relpath(source)), string(mdpage))\n    else\n         @info \"Translating ...\" joinpath(\"jp\", relpath(source))\n        mdsrc = replace(read(joinpath(\"jp\", relpath(source)), String), '\\r' =&gt; \"\")\n        mdpage = Markdown.parse(mdsrc)\n    end\n    # end DocstringTranslationOllamaBackend\n    mdast = try\n        convert(Documenter.MarkdownAST.Node, mdpage)\n    catch err\n        @error \"\"\"\n        MarkdownAST conversion error on $(source).\n        This is a bug — please report this on the Documenter issue tracker\n        \"\"\"\n        rethrow(err)\n    end\n    return Documenter.Page(\n        source,\n        build,\n        workdir,\n        mdpage.content,\n        Documenter.Globals(),\n        mdast,\n    )\nend"
+  },
+  {
+    "objectID": "slide/slide_en.html#outcomes",
+    "href": "slide/slide_en.html#outcomes",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Outcomes",
+    "text": "Outcomes\n\nhttps://atelierarith.github.io/UnofficialJuliaDocJP/\nhttps://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/"
+  },
+  {
+    "objectID": "slide/slide_en.html#things-not-well-understood",
+    "href": "slide/slide_en.html#things-not-well-understood",
+    "title": "Techniques for Julia Users in Non-English Speaking Regions",
+    "section": "Things Not Well Understood",
+    "text": "Things Not Well Understood\n\nThe part that detects and translates paragraphs is forcefully sped up by creating many threads and running them in parallel.\n\nIn short, a method to issue a large number of HTTP requests\nIs there a better way?\nIt can save tokens compared to translating the whole thing.\n\nManagement of translation result cache\n\nTranslating every time takes time.\n\nA method to manage translated results by associating them with hash keys\nThere seems to be a way to use Scratch.jl for translation results.\n\nWould a package like DocstringBankJP.jl be nice to have?"
+  },
+  {
+    "objectID": "slide/slide.html#背景",
+    "href": "slide/slide.html#背景",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "背景",
+    "text": "背景\n\nプログラミング言語 Julia の公式ドキュメント・マニュアルは “英語” で書かれている．よって “英語” で概念を理解をする必要がある．\n\n日本語で書かれた解説書は数冊はでているものの，最先端の情報は英語で書かれた文章を読む必要がある．\n\n必要に応じて GitHub の Issue, Julia の Discourse でコミュニケーションを（みんなが “英語” で書いてるので） “英語” で取ることになる．\n\nこのスライドを作成した人物は日本人であり日本語を母国語とする．\n\n当然，読み書きは日本語でする方が英語に比べて簡単・快適だと感じている．\n\n非英語圏の人間にとって心理的コスト・時間的コストは多かれ少なかれあると思われる．"
+  },
+  {
+    "objectID": "slide/slide.html#心理的時間的コストの定量化",
+    "href": "slide/slide.html#心理的時間的コストの定量化",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "心理的・時間的コストの定量化",
+    "text": "心理的・時間的コストの定量化\n(Tatsuya Amano 氏の投稿より)\n\n\n英語が母語でない研究者はどれ程の不利益を被っているのでしょうか。日本を含む８か国での調査によって、論文読解・執筆・出版、発表準備や国際学会参加を行う際に、英語ネイティブ話者に比べて非ネイティブは非常に大きな時間や労力を費やしていることを定量化しました。https://t.co/Z6za22rMgg pic.twitter.com/88KfiBFPN9\n\n— Tatsuya Amano (@tatsuya_amano) July 18, 2023"
+  },
+  {
+    "objectID": "slide/slide.html#どれだけ大変か",
+    "href": "slide/slide.html#どれだけ大変か",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "どれだけ大変か",
+    "text": "どれだけ大変か\nTatsuya Amano 氏の投稿より (https://x.com/tatsuya_amano/status/1681403580648140800 )\n\nこの問題は英語が母語でない研究者に多大な影響をもたらします。調査参加者の多くから、英語で科学を行うために「途方もない時間」と「経済的な負担」が必要で、大きな「ストレスと不安」を感じ、結果として「多くの研究が出版されず」「才能ある人材がキャリアを諦めている」という声が上がりました。\n\n\n研究者というある種の専門家でさえ困難を極めている．一般の人々なら尚更．"
+  },
+  {
+    "objectID": "slide/slide.html#実は英語はとても難しいのでは",
+    "href": "slide/slide.html#実は英語はとても難しいのでは",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "実は英語はとても難しいのでは",
+    "text": "実は英語はとても難しいのでは\n\nプログラミング言語 JuliaLang は柔軟なプログラミングを可能にしながら実行速度を担保する．\n\ntwo-language problem を解決している．\nWhy We Created Julia\n\nIn short, because we are greedy.\nWe are greedy: we want more.\n\n\n非英語圏の人間はもっと欲張り (=greedy) になってもいいのでは？"
+  },
+  {
+    "objectID": "slide/slide.html#実は英語はとても難しいのでは-1",
+    "href": "slide/slide.html#実は英語はとても難しいのでは-1",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "実は英語はとても難しいのでは",
+    "text": "実は英語はとても難しいのでは\n\n自然言語における \\((N \\geq 2)\\) -language problem が潜在的にあるのでは？\n\n同様に非英語圏における Julia ユーザをサポートがあってもいいのでは?\n母国語でマニュアルを読み思考する権利があってのいいのでは?\n母国語でドキュメントを書く権利があってもいいのでは?\n\n論理的に言えば日本語でドキュメントを書くことは可能\n\n\nあるのは経済的な障壁である．"
+  },
+  {
+    "objectID": "slide/slide.html#経済的な障壁",
+    "href": "slide/slide.html#経済的な障壁",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "経済的な障壁",
+    "text": "経済的な障壁\n\n英語で書かれているマニュアルを翻訳するには手間がかかる．\nバージョンが更新された際に翻訳箇所をアップデートする必要がある．それに追従するための手間がかかる．\n\nこれらの手間に対する対価を誰が支払うのか？\nJuliaHub 日本支社があれば是非入社したいが残念ながらそのようなポストは見つけられていない．"
+  },
+  {
+    "objectID": "slide/slide.html#機械翻訳の利用",
+    "href": "slide/slide.html#機械翻訳の利用",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "機械翻訳の利用",
+    "text": "機械翻訳の利用\n（多少ぎこちなくても)機械に任せよう．\n\nGoogle 翻訳\nDeepL、ChatGPT などの大規模言語モデル（LLM）を用いた解決策\n\nこのスライドでは ChatGPT の API を利用した翻訳方法について紹介する．"
+  },
+  {
+    "objectID": "slide/slide.html#docstring-の翻訳",
+    "href": "slide/slide.html#docstring-の翻訳",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "Docstring の翻訳",
+    "text": "Docstring の翻訳\n\nAtelierArith/DocstringTranslation.jl: Translate docstrings in Julia into your preferred language.\nAtelierArith/DocstringTranslationOllamaBackend.jl: DocstringTranslation using Ollama\nAtelierArith/DocstringTranslationGoogleTransBackend.jl: Translate Julia’s docstring using googletrans\nAtelierArith/DocstringTranslationExoBackend.jl: Translate Julia’s docstrings using exo: Run your own AI cluster at home with everyday devices\nAtelierArith/DocstringChef.jl: May I explain something?"
+  },
+  {
+    "objectID": "slide/slide.html#docstring-翻訳の原理",
+    "href": "slide/slide.html#docstring-翻訳の原理",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "Docstring 翻訳の原理",
+    "text": "Docstring 翻訳の原理\n\n@doc sin などを呼ばれたときメソッド Docs.parsedoc(d::DocStr) が呼ばれる．このメソッドをハックする．\n\nlang = \"Japanese\"\nswitchlang!(lang)\n@eval function Docs.parsedoc(d::DocStr)\n    if d.object === nothing\n        md = Docs.formatdoc(d)\n        md.meta[:module] = d.data[:module]\n        md.meta[:path] = d.data[:path]\n        d.object = md\n    end\n    # d.object # &lt;-- original implementation\n    translate_with_openai(d.object) # &lt;-- hack implementation\nend\nMarkdown オブジェクト d.object を所望の内容に変換することで目的を達成できる．"
+  },
+  {
+    "objectID": "slide/slide.html#markdown.parse-結果の利用",
+    "href": "slide/slide.html#markdown.parse-結果の利用",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "Markdown.parse 結果の利用",
+    "text": "Markdown.parse 結果の利用\nなるべくマークダウンの構造を壊さないように翻訳をする必要がある．\nMarkdown.parse の結果を利用して翻訳対象と翻訳するべきでない対象を区別する．\njulia&gt; md = Markdown.parse(\"See [Julia docs](https://docs.julialang.org/en/v1/) to learn more\")\n  See Julia docs (https://docs.julialang.org/en/v1/) to\n  learn more\n\njulia&gt; md.content\n1-element Vector{Any}:\n Markdown.Paragraph(Any[\"See \", Markdown.Link(Any[\"Julia docs\"], \"https://docs.julialang.org/en/v1/\"), \" to learn more\"])\n上記の例だと Markdown.Link の部分は翻訳を避けたい．それ以外は翻訳したい．"
+  },
+  {
+    "objectID": "slide/slide.html#markdown.link-の置き換え",
+    "href": "slide/slide.html#markdown.link-の置き換え",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "Markdown.Link の置き換え",
+    "text": "Markdown.Link の置き換え\n何かしらの方法で Markdown.Link(Any[\"Julia docs\"], \"https://docs.julialang.org/en/v1/\") を asfa93r_bfeafasf のように ID に変換する．\n翻訳後に ID を元に戻す.\njulia&gt; md = Markdown.parse(\"詳しくは `asfa93r_bfeafasf` を見てください\")\n  See asfa93r_bfeafasf to learn more\n\njulia&gt; md.content\n1-element Vector{Any}:\n Markdown.Paragraph(Any[\"詳しくは\", Markdown.Code(\"\", \"asfa93r_bfeafasf\"), \"を見てください\"])\nMarkdown.Code(\"\", \"asfa93r_bfeafasf\") の部分を Markdown.Link(Any[\"Julia docs\"], \"https://docs.julialang.org/en/v1/\") に置き換える．こうすると “概ね” cross reference に関するエラーを回避できる．（改善の余地はある）"
+  },
+  {
+    "objectID": "slide/slide.html#詳細な実装",
+    "href": "slide/slide.html#詳細な実装",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "詳細な実装",
+    "text": "詳細な実装\nfunction create_hex(l::Markdown.Link)\n    (bytes2hex(codeunits(join(l.text))) * \"_\" * bytes2hex(codeunits(l.url)))\nend\n\nfunction translate!(p::Markdown.Paragraph)\n    hex2link = Dict()\n    link2hex = Dict()\n    content = map(p.content) do c\n        # Protect Link so that it does not break during translation\n        if c isa Markdown.Link\n            h = create_hex(c)\n            hex2link[string(h)] = c\n            link2hex[c] = h\n            \"`\" * h * \"`\"\n        else\n            c\n        end\n    end\n    p_orig = deepcopy(p)\n    p.content = content\n    result = translate_with_openai(Markdown.MD(p), lang = \"Japanese\")\n    try\n        translated_content = map(result[1].content) do c\n            if c isa Markdown.Code\n                if isempty(c.language)\n                    c = get(hex2link, c.code, c)\n                else\n                    c\n                end\n            else\n                c\n            end\n        end\n        p.content = translated_content\n    catch e\n        @warn \"Failed to translate by $(e)\" p\n        return p_orig\n    end\n    return p\nend\n\nfunction translate!(list::Markdown.List)\n    for item in list.items\n        Base.Threads.@threads for i in item\n            translate!(i)\n        end\n    end\nend\n\nfunction translate!(c)\n    if hasproperty(c, :content)\n        Base.Threads.@threads for c in c.content\n            translate!(c)\n        end\n    end\n    c\nend\n\nfunction translate!(md::Markdown.MD)\n    Base.Threads.@threads for c in md.content\n        translate!(c)\n    end\n    md\nend"
+  },
+  {
+    "objectID": "slide/slide.html#documenter.pagesource-build-workdir-のハック",
+    "href": "slide/slide.html#documenter.pagesource-build-workdir-のハック",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "Documenter.Page(source, build, workdir のハック",
+    "text": "Documenter.Page(source, build, workdir のハック\nDocumenter.jl がマークダウンファイルを読み込むタイミングで翻訳機構を挿入する．\nfunction Documenter.Page(\n    source::AbstractString,\n    build::AbstractString,\n    workdir::AbstractString,\n)\n    # The Markdown standard library parser is sensitive to line endings:\n    #   https://github.com/JuliaLang/julia/issues/29344\n    # This can lead to different AST and therefore differently rendered docs, depending on\n    # what platform the docs are being built (e.g. when Git checks out LF files with\n    # CRFL line endings on Windows). To make sure that the docs are always built consistently,\n    # we'll normalize the line endings when parsing Markdown files by removing all CR characters.\n    \n    if !isfile(joinpath(\"jp\", relpath(source)))\n        mdsrc = replace(read(source, String), '\\r' =&gt; \"\")\n        mdpage = Markdown.parse(mdsrc)\n        @info \"Translating ...\" mdpage\n        mdpage = translate!(mdpage)\n        @info \"Translated\" mdpage\n        # end DocstringTranslationOllamaBackend\n        mkpath(dirname(joinpath(\"jp\", relpath(source))))\n        write(joinpath(\"jp\", relpath(source)), string(mdpage))\n    else\n         @info \"Translating ...\" joinpath(\"jp\", relpath(source))\n        mdsrc = replace(read(joinpath(\"jp\", relpath(source)), String), '\\r' =&gt; \"\")\n        mdpage = Markdown.parse(mdsrc)\n    end\n    # end DocstringTranslationOllamaBackend\n    mdast = try\n        convert(Documenter.MarkdownAST.Node, mdpage)\n    catch err\n        @error \"\"\"\n        MarkdownAST conversion error on $(source).\n        This is a bug — please report this on the Documenter issue tracker\n        \"\"\"\n        rethrow(err)\n    end\n    return Documenter.Page(\n        source,\n        build,\n        workdir,\n        mdpage.content,\n        Documenter.Globals(),\n        mdast,\n    )\nend"
+  },
+  {
+    "objectID": "slide/slide.html#成果物",
+    "href": "slide/slide.html#成果物",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "成果物",
+    "text": "成果物\n\nhttps://atelierarith.github.io/UnofficialJuliaDocJP/\nhttps://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/"
+  },
+  {
+    "objectID": "slide/slide.html#よくわかってないこと",
+    "href": "slide/slide.html#よくわかってないこと",
+    "title": "非英語圏における Julia ユーザのための技術",
+    "section": "よくわかってないこと",
+    "text": "よくわかってないこと\n\nパラグラフを検出し翻訳する箇所はスレッドをいっぱい作成して並列に回すことで強引に翻訳を高速している．\n\n要するに HTTP リクエストを大量に発行する方法\nもっと良い方法はある？\n丸ごと翻訳するよりトークン数を節約できる．\n\n翻訳結果のキャッシュの管理\n\n毎回翻訳するのは時間がかかる．\n\n翻訳済み結果は hash キーと対応させて管理する方法\n翻訳結果は Scratch.jl を使う方法がありそう．\n\nDocstringBankJP.jl 的なパッケージがあると嬉しい？"
+  }
+]
