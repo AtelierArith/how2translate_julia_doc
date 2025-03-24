@@ -1,0 +1,250 @@
+---
+title: Techniques for Julia Users in Non-English Speaking Regions
+author: SatoshiTerasaki@AtelierArith
+format:
+  revealjs:
+    theme: "black"
+    css: "../styles/style.css"
+    embed-resources: true
+    slide-number: true
+    show-notes: separate-page
+    mermaid:
+      theme: default
+    gfm:
+    mermaid-format: png
+---
+
+# Overview
+
+- Introducing techniques for translating documents written in English for Julia users in non-English speaking regions.
+
+---
+
+## Background
+
+- The official documentation and manuals for the programming language Julia are written in "English." Therefore, it is necessary to understand the concepts in "English."
+  - Although there are a few explanatory books written in Japanese, cutting-edge information requires reading documents written in English.
+- When necessary, communication on GitHub Issues and Julia Discourse will be conducted in "English" (since everyone writes in "English").
+  - The person who created this slide is Japanese and a native Japanese speaker.
+    - Naturally, they find reading and writing in Japanese easier and more comfortable than in English.
+  - It is believed that there is a psychological and time cost, to a greater or lesser extent, for non-English speakers.
+
+## Quantifying Psychological and Time Costs
+
+(From a post by `Tatsuya Amano`)
+
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">How much disadvantage do researchers whose native language is not English suffer? Through a survey in eight countries, including Japan, we quantified that non-native speakers spend significantly more time and effort compared to native English speakers when reading, writing, publishing papers, preparing presentations, and participating in international conferences. <a href="https://t.co/Z6za22rMgg">https://t.co/Z6za22rMgg</a> <a href="https://t.co/88KfiBFPN9">pic.twitter.com/88KfiBFPN9</a></p>&mdash; Tatsuya Amano (@tatsuya_amano) <a href="https://twitter.com/tatsuya_amano/status/1681403577510809600?ref_src=twsrc%5Etfw">July 18, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+
+## How Difficult It Is
+
+From a post by `Tatsuya Amano` (https://x.com/tatsuya_amano/status/1681403580648140800 )
+
+> This issue greatly affects researchers whose native language is not English. Many participants in the survey reported that conducting science in English requires "tremendous time" and "financial burden," causing significant "stress and anxiety," resulting in "many studies not being published" and "talented individuals giving up their careers."
+
+<br>
+
+Even experts like researchers find it extremely difficult. It is even more so for the general public.
+
+## Is English Actually Very Difficult?
+
+- The programming language JuliaLang enables flexible programming while ensuring execution speed.
+  - Solving the `two-language problem`.
+  - `Why We Created Julia`
+    - `In short, because we are greedy.`
+    - `We are greedy: we want more.`
+
+- Shouldn't non-English speakers become more `greedy`?
+
+## Is English Actually Very Difficult?
+
+- Is there a potential $(N \geq 2)$ -language problem in natural languages?
+  - Similarly, shouldn't there be support for Julia users in non-English speaking regions?
+  - Shouldn't there be the right to read and think in one's native language?
+  - Shouldn't there be the right to write documents in one's native language?
+    - Logically speaking, it is possible to write documents in Japanese.
+- The barrier is economic.
+
+## Economic Barriers
+
+- Translating manuals written in English is labor-intensive.
+- When a version is updated, it is necessary to update the translated sections, which requires additional effort.
+
+Who will pay for this effort?
+
+If there were a JuliaHub Japan branch, I would love to join, but unfortunately, I haven't found such a position.
+
+## Use of Machine Translation
+
+(Let's leave it to the machine, even if it's somewhat awkward.)
+
+- Google Translate
+- Solutions using large language models (LLM) like DeepL, ChatGPT
+
+This slide introduces a translation method using the ChatGPT API.
+
+## Translation of Docstrings
+
+- AtelierArith/DocstringTranslation.jl: Translate docstrings in Julia into your preferred language.
+- AtelierArith/DocstringTranslationOllamaBackend.jl: DocstringTranslation using Ollama
+- AtelierArith/DocstringTranslationGoogleTransBackend.jl: Translate Julia's docstring using googletrans
+- AtelierArith/DocstringTranslationExoBackend.jl: Translate Julia's docstrings using `exo`: Run your own AI cluster at home with everyday devices
+- AtelierArith/DocstringChef.jl: May I explain something?
+
+---
+
+### How to use `DocstringTranslation.jl`
+
+```julia
+julia> using DotEnv; DotEnv.load!(); 
+julia> using DocstringTranslation; @switchlang! :Japanese
+julia> @doc exp
+  exp(x)
+
+  xの自然基底指数を計算します。言い換えれば、ℯ^xです。
+
+  他にexp2、exp10、およびcisも参照してください。
+
+  例
+  ≡≡
+
+  julia> exp(1.0)
+  2.718281828459045
+
+  julia> exp(im * pi) ≈ cis(pi)
+  true
+
+  exp(A::AbstractMatrix)
+
+  行列 A
+  の行列指数関数を計算します。これは次のように定義されます。
+
+
+e^A = \sum_{n=0}^{\infty} \frac{A^n}{n!}.
+
+
+  対称行列またはエルミート行列 A
+  に対しては、固有分解（eigen）が使用され、それ以外の場合はスケーリングと平方化アルゴリズムが選択されます（詳細は
+  [^H05] を参照）。
+
+  │ [^H05]
+  │
+  │  Nicholas J. Higham, "The squaring and scaling
+  │  method for the matrix exponential revisited",
+  │  SIAM Journal on Matrix Analysis and
+  │  Applications, 26(4), 2005, 1179-1193.
+  │  doi:10.1137/090768539
+  │  (https://doi.org/10.1137/090768539)
+
+  例
+  ≡≡
+
+  julia> A = Matrix(1.0I, 2, 2)
+  2×2 Matrix{Float64}:
+   1.0  0.0
+   0.0  1.0
+
+  julia> exp(A)
+  2×2 Matrix{Float64}:
+   2.71828  0.0
+   0.0      2.71828
+```
+
+- The ChatGPT API model `gpt-4o-mini-2024-07-18` is being used.
+
+## Principle of Docstring Translation
+
+- When `@doc sin` is called, the method `Docs.parsedoc(d::DocStr)` is invoked. This method is hacked.
+
+```julia
+lang = "Japanese"
+switchlang!(lang)
+@eval function Docs.parsedoc(d::DocStr)
+    if d.object === nothing
+        md = Docs.formatdoc(d)
+        md.meta[:module] = d.data[:module]
+        md.meta[:path] = d.data[:path]
+        d.object = md
+    end
+    # d.object # <-- original implementation
+    translate_with_openai(d.object) # <-- hack implementation
+end
+```
+
+By converting the Markdown object `d.object` to the desired content, the goal can be achieved.
+
+---
+
+### Translation of Markdown with `Documenter.jl`
+
+- It is possible to consider translating an entire Markdown page (End-to-End).
+  - DocstringTranslation.jl is End-to-End
+- Translating Markdown using Documenter.jl syntax is difficult
+
+---
+
+### Translation of Markdown with `Documenter.jl`
+
+- It's actually not that simple
+  - There is a possibility of breaking the Markdown structure
+    - Possibility of missing backticks
+    - Translation results may affect mathematical mode rules
+  - Translating including source code blocks may cause failures during `doctest` execution.
+  - Problems arise if Documenter's `cross_references` syntax like `[xxx](@ref yyy)` is translated
+    - Translating the `xxx` part causes build failures during `cross_references` checks
+  - There are cases where `xxx` refers to `Header{n}`, so it cannot be easily translated.
+
+- Executing multiple small token inputs is faster than translating all sentences at once.
+
+---
+
+## Use of `Markdown.parse` Results
+
+It is necessary to translate in a way that does not break the Markdown structure as much as possible.
+
+Use the results of `Markdown.parse` to distinguish between what should and should not be translated.
+
+```julia
+julia> md = Markdown.parse("See [Julia docs](https://docs.julialang.org/en/v1/) to learn more")
+  See Julia docs (https://docs.julialang.org/en/v1/) to
+  learn more
+
+julia> md.content
+1-element Vector{Any}:
+ Markdown.Paragraph(Any["See ", Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/"), " to learn more"])
+```
+
+In the above example, the `Markdown.Link` part should be avoided in translation. Everything else should be translated.
+
+## Replacement of `Markdown.Link`
+
+Convert `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")` into an ID like `asfa93r_bfeafasf` by some method.
+
+Restore the ID after translation.
+
+Replace the part `Markdown.Code("", "asfa93r_bfeafasf")` with `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")`. This can "generally" avoid errors related to cross references. (There is room for improvement)
+
+## Detailed Implementation
+
+## Hack of `Documenter.Page(source, build, workdir`
+
+Insert the translation mechanism when Documenter.jl reads the markdown file.
+
+## Deliverables
+
+- https://atelierarith.github.io/UnofficialJuliaDocJP/
+- https://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/
+
+## Things Not Well Understood
+
+- The part that detects paragraphs and translates them creates many threads and runs them in parallel to forcefully speed up the translation.
+  - In short, a method to issue a large number of HTTP requests
+  - Is there a better way?
+  - It can save tokens compared to translating the whole thing.
+
+- Management of translation result cache
+  - Translating every time takes time.
+      - A method to manage translated results by associating them with hash keys
+      - There seems to be a way to use Scratch.jl for translation results.
+  - Would a package like DocstringBankJP.jl be nice?
