@@ -1,0 +1,96 @@
+---
+title: 非英語圏における Julia ユーザのための技術
+author: SatoshiTerasaki@AtelierArith
+format:
+  revealjs:
+    theme: "black"
+    css: "../styles/style.css"
+    embed-resources: true
+    slide-number: true
+    show-notes: separate-page
+    mermaid:
+      theme: default
+    gfm:
+    mermaid-format: png
+---
+
+# 概要
+
+- 非英語圏における Julia ユーザのために英語で記述されたドキュメントを翻訳する技術について紹介する．
+
+---
+
+## 背景
+
+- プログラミング言語 Julia の公式ドキュメント・マニュアルは "英語" で書かれている．よって "英語" で概念を理解をする必要がある．
+  - 日本語で書かれた解説書は数冊はでているものの，最先端の情報は英語で書かれた文章を読む必要がある．
+- 必要に応じて GitHub の Issue, Julia の Discourse でコミュニケーションを（みんなが "英語" で書いてるので） "英語" で取ることになる．
+  - このスライドを作成した人物は日本人であり日本語を母国語とする．
+    - 当然，読み書きは日本語でする方が英語に比べて簡単・快適だと感じている．
+  - 非英語圏の人間にとって心理的コスト・時間的コストは多かれ少なかれあると思われる．
+
+## 心理的・時間的コストの定量化
+
+(`Tatsuya Amano` 氏の投稿より)
+
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">英語が母語でない研究者はどれ程の不利益を被っているのでしょうか。日本を含む８か国での調査によって、論文読解・執筆・出版、発表準備や国際学会参加を行う際に、英語ネイティブ話者に比べて非ネイティブは非常に大きな時間や労力を費やしていることを定量化しました。<a href="https://t.co/Z6za22rMgg">https://t.co/Z6za22rMgg</a> <a href="https://t.co/88KfiBFPN9">pic.twitter.com/88KfiBFPN9</a></p>&mdash; Tatsuya Amano (@tatsuya_amano) <a href="https://twitter.com/tatsuya_amano/status/1681403577510809600?ref_src=twsrc%5Etfw">July 18, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+
+## どれだけ大変か
+
+`Tatsuya Amano` 氏の投稿より (https://x.com/tatsuya_amano/status/1681403580648140800 )
+
+> この問題は英語が母語でない研究者に多大な影響をもたらします。調査参加者の多くから、英語で科学を行うために「途方もない時間」と「経済的な負担」が必要で、大きな「ストレスと不安」を感じ、結果として「多くの研究が出版されず」「才能ある人材がキャリアを諦めている」という声が上がりました。
+
+<br>
+
+研究者というある種の専門家でさえ困難を極めている．一般の人々なら尚更．
+
+## 実は英語はとても大変なのでは
+
+- プログラミング言語 JuliaLang は柔軟なプログラミングを可能にしながら実行速度を担保する．
+  - `two-language problem` を解決している．
+  - `Why We Created Julia`
+    - `In short, because we are greedy.`
+    - `We are greedy: we want more.`
+
+- 非英語圏の人間はもっと`欲張り (=greedy)` になってもいいのでは？
+
+- 自然言語における $(N \geq 2)$ -language problem が潜在的にあるのでは？
+  - 同様に非英語圏における Julia ユーザをサポートがあってもいいのでは?
+  - 母国語でマニュアルを読み思考する権利があってのいいのでは?
+  - 母国語でドキュメントを書く権利があってもいいのでは?
+    - 論理的に言えば日本語でドキュメントを書くことは可能
+- あるのは経済的な障壁である．
+
+## 経済的な障壁
+
+- 英語で書かれているマニュアルを翻訳するには手間がかかる．
+- バージョンが更新された際に翻訳箇所をアップデートする必要がある．それに追従するための手間がかかる．
+
+これらの手間に対する対価を誰が支払うのか？
+
+JuliaHub 日本支社があれば是非入社したいが残念ながらそのようなポストは見つけられていない．
+
+## 機械翻訳の利用
+
+機械に任せよう．
+
+- Google 翻訳
+- DeepL、ChatGPT などの大規模言語モデル（LLM）を用いた解決策
+
+このスライドでは ChatGPT の API を利用した翻訳方法について紹介する．
+
+## Docstring の翻訳
+
+- AtelierArith/DocstringTranslation.jl: Translate docstrings in Julia into your preferred language.
+- AtelierArith/DocstringTranslationOllamaBackend.jl: DocstringTranslation using Ollama
+- AtelierArith/DocstringTranslationGoogleTransBackend.jl: Translate Julia's docstring using googletrans
+- AtelierArith/DocstringTranslationExoBackend.jl: Translate Julia's docstrings using `exo`: Run your own AI cluster at home with everyday devices
+- AtelierArith/DocstringChef.jl: May I explain something?
+
+## Documenter.jl ベースのドキュメント翻訳
+
+意外と難しい
+
