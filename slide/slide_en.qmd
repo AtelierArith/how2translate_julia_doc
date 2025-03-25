@@ -24,24 +24,24 @@ format:
 
 - The official documentation and manuals for the programming language Julia are written in "English." Therefore, it is necessary to understand concepts in "English."
   - Although there are a few explanatory books written in Japanese, cutting-edge information requires reading texts written in English.
-- When necessary, communication on GitHub Issues and Julia Discourse will be in "English" (since everyone writes in "English").
+- Communication on GitHub Issues and Julia's Discourse will be in "English" (since everyone writes in "English").
   - The person who created this slide is Japanese and a native Japanese speaker.
     - Naturally, they find it easier and more comfortable to read and write in Japanese compared to English.
-  - It is believed that there is a psychological and time cost, to a greater or lesser extent, for non-English speakers.
+  - It is believed that there is a psychological and time cost, to some extent, for non-English speakers.
 
 ## Quantifying Psychological and Time Costs
 
 (From a post by `Tatsuya Amano`)
 
-<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">How much disadvantage do researchers who are not native English speakers face? Through a survey in eight countries, including Japan, we quantified that non-native speakers spend significantly more time and effort compared to native English speakers when reading, writing, publishing papers, preparing presentations, and participating in international conferences. <a href="https://t.co/Z6za22rMgg">https://t.co/Z6za22rMgg</a> <a href="https://t.co/88KfiBFPN9">pic.twitter.com/88KfiBFPN9</a></p>&mdash; Tatsuya Amano (@tatsuya_amano) <a href="https://twitter.com/tatsuya_amano/status/1681403577510809600?ref_src=twsrc%5Etfw">July 18, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">How disadvantaged are researchers whose native language is not English? Through a survey in eight countries, including Japan, we quantified that non-native speakers spend significantly more time and effort compared to native English speakers when reading, writing, and publishing papers, preparing presentations, and participating in international conferences.<a href="https://t.co/Z6za22rMgg">https://t.co/Z6za22rMgg</a> <a href="https://t.co/88KfiBFPN9">pic.twitter.com/88KfiBFPN9</a></p>&mdash; Tatsuya Amano (@tatsuya_amano) <a href="https://twitter.com/tatsuya_amano/status/1681403577510809600?ref_src=twsrc%5Etfw">July 18, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ---
 
 ## How Difficult It Is
 
-From a post by `Tatsuya Amano` (https://x.com/tatsuya_amano/status/1681403580648140800)
+From a post by `Tatsuya Amano` (https://x.com/tatsuya_amano/status/1681403580648140800 )
 
-> This issue greatly affects researchers who are not native English speakers. Many survey participants reported that conducting science in English requires "enormous time" and "financial burden," causing significant "stress and anxiety," and as a result, "many studies are not published" and "talented individuals abandon their careers."
+> This issue greatly affects researchers whose native language is not English. Many participants in the survey reported that conducting science in English requires "enormous time" and "financial burden," causing significant "stress and anxiety," and as a result, "many studies remain unpublished" and "talented individuals abandon their careers."
 
 <br>
 
@@ -50,12 +50,12 @@ Even experts like researchers find it extremely challenging. It is even more so 
 ## Is English Actually Very Difficult?
 
 - The programming language JuliaLang enables flexible programming while ensuring execution speed.
-  - It solves the `two-language problem`.
+  - Solving the `two-language problem`.
   - `Why We Created Julia`
     - `In short, because we are greedy.`
     - `We are greedy: we want more.`
 
-- Shouldn't non-English speakers also become more `greedy`?
+- Shouldn't non-English speakers become more `greedy`?
 
 ## Is English Actually Very Difficult?
 
@@ -69,7 +69,7 @@ Even experts like researchers find it extremely challenging. It is even more so 
 ## Economic Barriers
 
 - Translating manuals written in English is labor-intensive.
-- When a version is updated, it is necessary to update the translated sections. Keeping up with this requires effort.
+- When a version is updated, it's necessary to update the translated sections, which requires additional effort.
 
 Who will pay for this effort?
 
@@ -77,12 +77,12 @@ If there were a JuliaHub Japan branch, I would love to join, but unfortunately, 
 
 ## Use of Machine Translation
 
-(Let's leave it to the machine, even if it's a bit awkward.)
+(Let's rely on machines, even if it's a bit awkward.)
 
 - Google Translate
 - Solutions using large language models (LLM) like DeepL, ChatGPT
 
-This slide introduces a translation method using the ChatGPT API.
+This slide introduces translation methods using the ChatGPT API.
 
 ## Translation of Docstrings
 
@@ -180,19 +180,19 @@ By converting the Markdown object `d.object` to the desired content, the goal ca
 
 - It is possible to consider translating an entire Markdown page (End-to-End).
   - DocstringTranslation.jl is End-to-End
-- Translating Markdown using Documenter.jl syntax is difficult
+- Translating Markdown using Documenter.jl syntax is difficult.
 
 ---
 
 ### Translation of Markdown with `Documenter.jl`
 
-- It's actually not that simple
+- It's not actually that simple
   - There is a possibility of breaking the Markdown structure
     - Possibility of missing backticks
-    - Translation results may affect mathematical mode rules
+    - Translation results may affect math mode rules
   - Translating including source code blocks may cause failures during `doctest` execution.
-  - If Documenter's `cross_references` syntax like `[xxx](@ref yyy)` is translated, it causes issues
-    - Translating the `xxx` part causes build failures during `cross_references` checks
+  - Problems arise if the Documenter syntax `[xxx](@ref yyy)` representing `cross_references` is translated
+    - Translating parts like `xxx` or `yyy` causes build failures during `cross_references` checks
   - Since `xxx` may refer to `Header{n}`, it cannot be easily translated.
 
 - Executing multiple small token inputs is faster than translating all sentences at once.
@@ -201,7 +201,7 @@ By converting the Markdown object `d.object` to the desired content, the goal ca
 
 ## Use of `Markdown.parse` Results
 
-It is necessary to translate without breaking the Markdown structure as much as possible.
+Translation should be done without breaking the Markdown structure as much as possible.
 
 Use the results of `Markdown.parse` to distinguish between what should and should not be translated.
 
@@ -215,13 +215,13 @@ julia> md.content
  Markdown.Paragraph(Any["See ", Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/"), " to learn more"])
 ```
 
-In the above example, the `Markdown.Link` part should be avoided in translation. Everything else should be translated.
+In the example above, the `Markdown.Link` part should be avoided in translation. Everything else should be translated.
 
 ## Replacement of `Markdown.Link`
 
 Convert `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")` into an ID like `asfa93r_bfeafasf` by some method.
 
-Restore the ID after translation.
+Translate back to the original ID.
 
 ```julia
 julia> md = Markdown.parse("詳しくは `asfa93r_bfeafasf` を見てください")
@@ -232,7 +232,7 @@ julia> md.content
  Markdown.Paragraph(Any["詳しくは", Markdown.Code("", "asfa93r_bfeafasf"), "を見てください"])
 ```
 
-Replace the part `Markdown.Code("", "asfa93r_bfeafasf")` with `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")`. This can "generally" avoid errors related to cross-references. (There is room for improvement)
+Replace the part `Markdown.Code("", "asfa93r_bfeafasf")` with `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")`. This can "generally" avoid errors related to cross references. (There is room for improvement)
 
 ## Detailed Implementation
 
@@ -303,7 +303,7 @@ function translate!(md::Markdown.MD)
 end
 ```
 
-## Hack for `Documenter.Page(source, build, workdir`
+## Hack of `Documenter.Page(source, build, workdir`
 
 Insert the translation mechanism when Documenter.jl reads the markdown file.
 
@@ -355,14 +355,14 @@ function Documenter.Page(
 end
 ```
 
-## Outcomes
+## Deliverables
 
 - https://atelierarith.github.io/UnofficialJuliaDocJP/
 - https://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/
 
 ## Things Not Well Understood
 
-- The part that detects and translates paragraphs is forcefully sped up by creating many threads and running them in parallel.
+- The part that detects paragraphs and translates them is forcibly sped up by creating many threads and running them in parallel.
   - In short, a method to issue a large number of HTTP requests
   - Is there a better way?
   - It can save tokens compared to translating the whole thing.
@@ -372,3 +372,7 @@ end
       - A method to manage translated results by associating them with hash keys
       - There seems to be a way to use Scratch.jl for translation results.
   - Would a package like DocstringBankJP.jl be nice to have?
+
+## Conclusion
+
+Thank you very much.
