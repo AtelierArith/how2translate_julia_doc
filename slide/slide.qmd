@@ -24,10 +24,10 @@ format:
 
 - プログラミング言語 Julia の公式ドキュメント・マニュアルは "英語" で書かれている．よって "英語" で概念を理解をする必要がある．
   - 日本語で書かれた解説書は数冊はでているものの，最先端の情報は英語で書かれた文章を読む必要がある．
-- 必要に応じて GitHub の Issue, Julia の Discourse でコミュニケーションを（みんなが "英語" で書いてるので） "英語" で取ることになる．
+- 必要に応じて GitHub の Issue, Julia の Discourse でコミュニケーションを（みんなが "英語" で書いてるので） "英語" で行うことになる．
   - このスライドを作成した人物は日本人であり日本語を母国語とする．
     - 当然，読み書きは日本語でする方が英語に比べて簡単・快適だと感じている．
-  - 非英語圏の人間にとって心理的コスト・時間的コストは多かれ少なかれあると思われる．
+  - 非英語圏の人間にとって英語を使ったコミュニケーションは心理的コスト・時間的コストは多かれ少なかれあると思われる．
 
 ## 心理的・時間的コストの定量化
 
@@ -237,17 +237,17 @@ julia> md.content
 ## 詳細な実装
 
 ```julia
-function create_hex(l::Markdown.Link)
+
     (bytes2hex(codeunits(join(l.text))) * "_" * bytes2hex(codeunits(l.url)))
 end
 
-function translate!(p::Markdown.Paragraph)
+function _translate!(p::Markdown.Paragraph)
     hex2link = Dict()
     link2hex = Dict()
     content = map(p.content) do c
         # Protect Link so that it does not break during translation
         if c isa Markdown.Link
-            h = create_hex(c)
+            h = _create_hex(c)
             hex2link[string(h)] = c
             link2hex[c] = h
             "`" * h * "`"
@@ -257,12 +257,19 @@ function translate!(p::Markdown.Paragraph)
     end
     p_orig = deepcopy(p)
     p.content = content
-    result = translate_with_openai(Markdown.MD(p), lang = "Japanese")
+    result = translate_documenter_md_with_openai(Markdown.MD(p))
     try
         translated_content = map(result[1].content) do c
             if c isa Markdown.Code
                 if isempty(c.language)
-                    c = get(hex2link, c.code, c)
+                    if c.code in keys(hex2link)
+                        _c = hex2link[c.code]
+                        delete!(hex2link, c.code)
+                        c = _c
+                        c
+                    else
+                        c
+                    end
                 else
                     c
                 end
@@ -270,40 +277,47 @@ function translate!(p::Markdown.Paragraph)
                 c
             end
         end
-        p.content = translated_content
+        if isempty(hex2link)
+            p.content = translated_content
+        else
+            @warn "Failed to translate by hex2link"
+            p.content = p_orig.content
+        end
     catch e
         @warn "Failed to translate by $(e)" p
-        return p_orig
+        p.content = p_orig.content
     end
-    return p
+    nothing
 end
 
-function translate!(list::Markdown.List)
+function _translate!(list::Markdown.List)
     for item in list.items
         Base.Threads.@threads for i in item
-            translate!(i)
+            _translate!(i)
         end
     end
 end
 
-function translate!(c)
+function _translate!(c)
     if hasproperty(c, :content)
         Base.Threads.@threads for c in c.content
-            translate!(c)
+            _translate!(c)
         end
     end
     c
 end
 
-function translate!(md::Markdown.MD)
+function translate_md!(md::Markdown.MD)
     Base.Threads.@threads for c in md.content
-        translate!(c)
+        _translate!(c)
     end
     md
 end
 ```
 
-## `Documenter.Page(source, build, workdir` のハック
+---
+
+### `Documenter.Page(source, build, workdir` のハック
 
 Documenter.jl がマークダウンファイルを読み込むタイミングで翻訳機構を挿入する．
 
@@ -357,8 +371,60 @@ end
 
 ## 成果物
 
-- https://atelierarith.github.io/UnofficialJuliaDocJP/
-- https://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/
+- [UnofficialJuliaDoc-ja](https://atelierarith.github.io/UnofficialJuliaDoc-ja/) 日本語
+- [UnofficialJuliaDoc-de](https://atelierarith.github.io/UnofficialJuliaDoc-de/) ドイツ語
+- [UnofficialJuliaDoc-fr](https://atelierarith.github.io/UnofficialJuliaDoc-fr/) フランス語
+- [UnofficialJuliaDoc-es](https://atelierarith.github.io/UnofficialJuliaDoc-es/) スペイン語
+
+せっかくなので Documenter.jl の日本語翻訳版も置いておくね．
+
+- [JapaneseTranslatedDocumenterHTML](https://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/)
+
+---
+ 
+## 翻訳結果の再利用
+
+- Scratch.jl を用いて翻訳結果をキャッシュする仕組みを採用．
+  - 途中でエラーが起きても翻訳したものを再利用し復帰することが可能．
+  - `~/.julia/scrathspace/<UUID>/translation` というディレクトリに格納される
+
+```julia
+using Scratch
+const TRANSLATION_CACHE_DIR = Ref{String}()
+
+function __init__()
+    global TRANSLATION_CACHE_DIR[] = @get_scratch!("translation")
+end
+
+function istranslated(md::Markdown.MD)
+    cachedir = TRANSLATION_CACHE_DIR[]
+    lang = DEFAULT_LANG[]
+    isfile(joinpath(cachedir, hashmd(md), lang * ".md"))
+end
+
+function load_translation(hash::String)
+    cachedir = TRANSLATION_CACHE_DIR[]
+    lang = DEFAULT_LANG[]
+    Markdown.parse(
+        postprocess_content(read(joinpath(cachedir, hash, lang * ".md"), String)),
+    )
+end
+
+function cache_original(md::Markdown.MD)
+    cachedir = TRANSLATION_CACHE_DIR[]
+    mkpath(joinpath(cachedir, hashmd(md)))
+    write(joinpath(cachedir, hashmd(md), "original.md"), string(md))
+end
+
+function cache_translation(hash::String, transmd::Markdown.MD)
+    cachedir = TRANSLATION_CACHE_DIR[]
+    lang = DEFAULT_LANG[]
+    mkpath(joinpath(cachedir, hash))
+    write(joinpath(cachedir, hash, lang * ".md"), string(transmd))
+end
+```
+
+---
 
 ## よくわかってないこと
 
@@ -366,13 +432,97 @@ end
   - 要するに HTTP リクエストを大量に発行する方法
   - もっと良い方法はある？
   - 丸ごと翻訳するよりトークン数を節約できる．
+- docstring の並列翻訳する方法
+- `translation` ディレクトリの共有方法
+  - Artifact の機能を使えば良いかもしれない．
 
-- 翻訳結果のキャッシュの管理
-  - 毎回翻訳するのは時間がかかる．
-      - 翻訳済み結果は hash キーと対応させて管理する方法
-      - 翻訳結果は Scratch.jl を使う方法がありそう．
-  - DocstringBankJP.jl 的なパッケージがあると嬉しい？
+---
 
 ## 以上
 
 ありがとうございました．
+
+---
+
+# Appendix
+
+`@switchlang!` macro の実装
+
+```julia
+"""
+    @switchlang!(lang)
+
+Modify Docs.parsedoc(d::DocStr) to insert translation engine.
+"""
+macro switchlang!(lang)
+    @eval function Docs.parsedoc(d::DocStr)
+        if d.object === nothing
+            md = Docs.formatdoc(d)
+            md.meta[:module] = d.data[:module]
+            md.meta[:path] = d.data[:path]
+            d.object = md
+        end
+        cache_original(d.object)
+        hash = hashmd(d.object)
+        if istranslated(d.object)
+            transmd = load_translation(hash)
+            return transmd
+        else
+            transmd = translate_docstring_with_openai(d.object)
+            cache_translation(hash, transmd)
+            return transmd
+        end
+    end
+
+    # Overrides Page constructor to hack Documenter to translate docstrings
+    @eval function Documenter.Page(
+        source::AbstractString,
+        build::AbstractString,
+        workdir::AbstractString,
+    )
+        # The Markdown standard library parser is sensitive to line endings:
+        #   https://github.com/JuliaLang/julia/issues/29344
+        # This can lead to different AST and therefore differently rendered docs, depending on
+        # what platform the docs are being built (e.g. when Git checks out LF files with
+        # CRFL line endings on Windows). To make sure that the docs are always built consistently,
+        # we'll normalize the line endings when parsing Markdown files by removing all CR characters.
+
+        mdsrc = replace(read(source, String), '\r' => "")
+        mdpage = Markdown.parse(mdsrc)
+        cache_original(mdpage)
+        @info "Translating ..." mdpage
+        hashvalue = hashmd(mdpage)
+        if !istranslated(mdpage)
+            # Update mdpage object
+            mdpage = translate_md!(mdpage)
+            # end DocstringTranslationOllamaBackend
+            cache_translation(hashvalue, mdpage)
+        else
+            mdpage = load_translation(hashvalue)
+        end
+        @info "Translated" mdpage
+        # end DocstringTranslationOllamaBackend
+        mdast = try
+            convert(Documenter.MarkdownAST.Node, mdpage)
+        catch err
+            @error """
+            MarkdownAST conversion error on $(source).
+            This is a bug — please report this on the Documenter issue tracker
+            """
+            rethrow(err)
+        end
+        return Documenter.Page(
+            source,
+            build,
+            workdir,
+            mdpage.content,
+            Documenter.Globals(),
+            mdast,
+        )
+    end
+    quote
+        local _lang = $(esc(lang))
+        _switchlang!(_lang)
+    end
+end
+```
