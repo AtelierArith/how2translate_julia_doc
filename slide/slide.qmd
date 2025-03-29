@@ -47,6 +47,8 @@ format:
 
 研究者というある種の専門家でさえ困難を極めている．一般の人々なら尚更．
 
+---
+
 ## 実は英語はとても難しいのでは
 
 - プログラミング言語 JuliaLang は柔軟なプログラミングを可能にしながら実行速度を担保する．
@@ -57,6 +59,8 @@ format:
 
 - 非英語圏の人間はもっと`欲張り (=greedy)` になってもいいのでは？
 
+---
+
 ## 実は英語はとても難しいのでは
 
 - 自然言語における $(N \geq 2)$ -language problem が潜在的にあるのでは？
@@ -65,6 +69,8 @@ format:
   - 母国語でドキュメントを書く権利があってもいいのでは?
     - 論理的に言えば日本語でドキュメントを書くことは可能
 - あるのは経済的な障壁である．
+
+---
 
 ## 経済的な障壁
 
@@ -75,6 +81,8 @@ format:
 
 JuliaHub 日本支社があれば是非入社したいが残念ながらそのようなポストは見つけられていない．
 
+---
+
 ## 機械翻訳の利用
 
 （多少ぎこちなくても)機械に任せよう．
@@ -84,7 +92,9 @@ JuliaHub 日本支社があれば是非入社したいが残念ながらその�
 
 このスライドでは ChatGPT の API を利用した翻訳方法について紹介する．
 
-## Docstring の翻訳
+---
+
+## Docstring の翻訳のために作ったパッケージ
 
 - AtelierArith/DocstringTranslation.jl: Translate docstrings in Julia into your preferred language.
 - AtelierArith/DocstringTranslationOllamaBackend.jl: DocstringTranslation using Ollama
@@ -217,6 +227,8 @@ julia> md.content
 
 上記の例だと `Markdown.Link` の部分は翻訳を避けたい．それ以外は翻訳したい．
 
+---
+
 ## `Markdown.Link` の置き換え
 
 何かしらの方法で `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")` を `asfa93r_bfeafasf` のように ID に変換する．
@@ -233,6 +245,8 @@ julia> md.content
 ```
 
 `Markdown.Code("", "asfa93r_bfeafasf")` の部分を `Markdown.Link(Any["Julia docs"], "https://docs.julialang.org/en/v1/")` に置き換える．こうすると "概ね" cross reference に関するエラーを回避できる．（改善の余地はある）
+
+---
 
 ## 詳細な実装
 
@@ -369,17 +383,6 @@ function Documenter.Page(
 end
 ```
 
-## 成果物
-
-- [UnofficialJuliaDoc-ja](https://atelierarith.github.io/UnofficialJuliaDoc-ja/) 日本語
-- [UnofficialJuliaDoc-de](https://atelierarith.github.io/UnofficialJuliaDoc-de/) ドイツ語
-- [UnofficialJuliaDoc-fr](https://atelierarith.github.io/UnofficialJuliaDoc-fr/) フランス語
-- [UnofficialJuliaDoc-es](https://atelierarith.github.io/UnofficialJuliaDoc-es/) スペイン語
-
-せっかくなので Documenter.jl の日本語翻訳版も置いておくね．
-
-- [JapaneseTranslatedDocumenterHTML](https://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/)
-
 ---
  
 ## 翻訳結果の再利用
@@ -435,6 +438,32 @@ end
 - docstring の並列翻訳する方法
 - `translation` ディレクトリの共有方法
   - Artifact の機能を使えば良いかもしれない．
+- キャッシュをするための良いデータ構造
+
+---
+
+## 翻訳のために用いたソースコード
+
+翻訳に用いたソフトウェアはこちら:
+
+- [DocumenterTranslationOpenAIBackend.jl](https://github.com/AtelierArith/DocumenterTranslationOpenAIBackend.jl)
+
+翻訳結果はこちらに格納している:
+
+- [DocStrBankExperimental.jl](https://github.com/AtelierArith/DocStrBankExperimental.jl)
+
+---
+
+## 成果物
+
+- [UnofficialJuliaDoc-ja](https://atelierarith.github.io/UnofficialJuliaDoc-ja/) 日本語
+- [UnofficialJuliaDoc-de](https://atelierarith.github.io/UnofficialJuliaDoc-de/) ドイツ語
+- [UnofficialJuliaDoc-fr](https://atelierarith.github.io/UnofficialJuliaDoc-fr/) フランス語
+- [UnofficialJuliaDoc-es](https://atelierarith.github.io/UnofficialJuliaDoc-es/) スペイン語
+
+せっかくなので Documenter.jl の日本語翻訳版も置いておくね．
+
+- [JapaneseTranslatedDocumenterHTML](https://atelierarith.github.io/JapaneseTranslatedDocumenterHTML/)
 
 ---
 
