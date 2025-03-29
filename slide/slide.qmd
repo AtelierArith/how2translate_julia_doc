@@ -237,7 +237,7 @@ julia> md.content
 ## 詳細な実装
 
 ```julia
-
+function
     (bytes2hex(codeunits(join(l.text))) * "_" * bytes2hex(codeunits(l.url)))
 end
 
